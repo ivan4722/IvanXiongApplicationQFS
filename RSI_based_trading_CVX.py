@@ -43,16 +43,16 @@ def calculate_rsi(data, window=14):
 data['RSI'] = calculate_rsi(data)
 
 #plotting RSI (uncomment to use)
-'''
+
 plt.figure(figsize=(12, 6))
 plt.plot(data['RSI'], label='RSI')
-plt.title('CVX RSI')
+plt.title(stock+' RSI')
 plt.xlabel('Date')
 plt.ylabel('RSI')
 plt.legend()
 plt.grid()
 plt.show()
-'''
+
 
 cvx_less_than_threshold = []
 #dt defined so I don't sell the stock in the future, where there is obviously no data
@@ -63,7 +63,7 @@ dt_est = est.localize(dt)
 bestrsi=0
 bestprofit=-9999
 profit=-999
-numtrades=0
+#numtrades=0
 for i in range(1,31,1):
     rsi_threshold=i
     for date, rsi_value in stock_data['RSI'].items():
@@ -79,12 +79,10 @@ for i in range(1,31,1):
         if a in stock_data.index and date_30_days_later in stock_data.index:
             sumbuy += stock_data['Close'][a]
             sumsell += stock_data['Close'][date_30_days_later]
-            if rsi_threshold==8:
-                numtrades+=1
             
     
     if sumsell!=0:
-        profit = (sumsell-sumbuy)/sumsell *100
+        profit = (sumsell-sumbuy)/sumbuy *100
     if profit > bestprofit:
         bestprofit=profit
         bestrsi=rsi_threshold
@@ -93,4 +91,4 @@ for i in range(1,31,1):
     print('Total amount received from selling:', sumsell)
     print("percent profit: ", profit)
 print("best rsi:", bestrsi, "with profit of: ", bestprofit)
-print("numtrades: ", numtrades)
+#print("numtrades: ", numtrades)
